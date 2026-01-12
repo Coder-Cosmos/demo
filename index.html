@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Account Verification</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -14,21 +13,16 @@
       height: 100vh;
     }
     .box {
-      background: #ffffff;
+      background: white;
       padding: 20px;
-      width: 330px;
-      border-radius: 6px;
-      box-shadow: 0 0 12px rgba(0,0,0,0.15);
-    }
-    h3 {
-      margin-top: 0;
-      text-align: center;
+      width: 320px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
     input, button {
       width: 100%;
       margin-top: 10px;
       padding: 8px;
-      font-size: 14px;
     }
     button {
       background: #007BFF;
@@ -36,52 +30,52 @@
       border: none;
       cursor: pointer;
     }
-    #locationBox {
-      margin-top: 12px;
-      padding: 8px;
-      background: #f7f7f7;
-      font-size: 13px;
-      border-radius: 4px;
-    }
-    .note {
-      font-size: 11px;
+    #location {
+      font-size: 14px;
       margin-top: 10px;
-      color: #555;
-      text-align: center;
     }
   </style>
 </head>
 <body>
 
-  <div class="box">
-    <h3>Verify Your Account</h3>
+<div class="box">
+  <h3>Verify Your Account</h3>
 
-    <input type="text" placeholder="Full Name" required>
-    <input type="tel" placeholder="Mobile Number" required>
+  <input type="text" placeholder="Full Name" required>
+  <input type="tel" placeholder="Mobile Number" required>
 
-    <div id="locationBox">
-      Detecting your location...
-    </div>
+  <button onclick="getLocation()">Detect Location</button>
+  <div id="location">Location not detected</div>
 
-    <button>Verify</button>
+  <button style="margin-top:15px;">Verify</button>
 
-  </div>
+  <p style="font-size:12px; margin-top:10px;">
+    This page is for cybersecurity awareness training only.
+  </p>
+</div>
 
-  <script>
-    fetch("https://ipapi.co/json/")
-      .then(response => response.json())
-      .then(data => {
-        document.getElementById("locationBox").innerHTML =
-          "<strong>Location detected:</strong><br>" +
-          "City: " + data.city + "<br>" +
-          "Region: " + data.region + "<br>" +
-          "Country: " + data.country_name;
-      })
-      .catch(() => {
-        document.getElementById("locationBox").innerText =
-          "Unable to detect location";
-      });
-  </script>
+<script>
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        function(position) {
+          document.getElementById("location").innerText =
+            "Location detected: Lat " +
+            position.coords.latitude.toFixed(4) +
+            ", Long " +
+            position.coords.longitude.toFixed(4);
+        },
+        function() {
+          document.getElementById("location").innerText =
+            "Location access denied";
+        }
+      );
+    } else {
+      document.getElementById("location").innerText =
+        "Geolocation not supported";
+    }
+  }
+</script>
 
 </body>
 </html>
